@@ -134,7 +134,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                   </div>
                   <div className="flex items-center gap-3 text-zinc-400 group-hover:text-zinc-200 transition-colors">
                     {p.githubUrl && <Github className="w-4 h-4 hover:text-orange-500" />}
-                    <ExternalLink className="w-4 h-4 hover:text-orange-500" />
+                    {p.liveUrl && <ExternalLink className="w-4 h-4 hover:text-orange-500" />}
                   </div>
                 </div>
 
@@ -333,7 +333,7 @@ export default function ProjectShowcase({ projects }: ProjectShowcaseProps) {
                       </span>
                     </div>
                     <div className="rounded-lg bg-zinc-900 border border-zinc-800 p-4 font-mono text-xs overflow-x-auto text-zinc-300 max-h-[350px]">
-                      <pre className="whitespace-pre">{selectedProject.codeSnippet}</pre>
+                      <pre className="whitespace-pre">{selectedProject.codeSnippet ?? "No code snippet is available for this project."}</pre>
                     </div>
                   </div>
                 )}

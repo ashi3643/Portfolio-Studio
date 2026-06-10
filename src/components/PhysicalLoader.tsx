@@ -24,12 +24,13 @@ export default function PhysicalLoader({ onComplete }: PhysicalLoaderProps) {
       "Ready to launch portfolio!"
     ];
 
-    const interval = setInterval(() => {
+    let completionTimeoutId: number | null = null;
+    const interval = window.setInterval(() => {
       setProgress((prev) => {
         const next = prev + 1.2;
         if (next >= 100) {
-          clearInterval(interval);
-          setTimeout(() => {
+          window.clearInterval(interval);
+          completionTimeoutId = window.setTimeout(() => {
             if (!isSkipped) {
               onComplete();
             }
@@ -44,7 +45,12 @@ export default function PhysicalLoader({ onComplete }: PhysicalLoaderProps) {
       });
     }, 45);
 
-    return () => clearInterval(interval);
+    return () => {
+      window.clearInterval(interval);
+      if (completionTimeoutId !== null) {
+        window.clearTimeout(completionTimeoutId);
+      }
+    };
   }, [onComplete, isSkipped]);
 
   useEffect(() => {
@@ -108,7 +114,7 @@ export default function PhysicalLoader({ onComplete }: PhysicalLoaderProps) {
       canvas.height = rect.height * dpr;
       canvas.style.width = `${rect.width}px`;
       canvas.style.height = `${rect.height}px`;
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       // Center ball on resize if it's new
       if (ball.x === 0 && ball.y === 0) {
@@ -256,8 +262,8 @@ export default function PhysicalLoader({ onComplete }: PhysicalLoaderProps) {
 
     // Render loop
     const render = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
       const rect = getSafeRect();
+      ctx.clearRect(0, 0, rect.width, rect.height);
       const height = rect.height;
       const floorY = height - 60;
 

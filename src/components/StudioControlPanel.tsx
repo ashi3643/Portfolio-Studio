@@ -65,7 +65,7 @@ export default function StudioControlPanel({
   };
 
   // 1. Profile / Story updates
-  const handleProfileFieldChange = (field: keyof PortfolioData, value: any) => {
+  const handleProfileFieldChange = <K extends keyof PortfolioData>(field: K, value: PortfolioData[K]) => {
     const updated = { ...portfolioData, [field]: value };
     onUpdate(updated);
   };
@@ -179,7 +179,7 @@ export default function StudioControlPanel({
       id: slugId,
       title: newProject.title,
       description: newProject.description,
-      category: (newProject.category as any) || "AI",
+      category: newProject.category ?? "AI",
       tags: finalTags.length > 0 ? finalTags : ["React", "AI"],
       githubUrl: newProject.githubUrl || "",
       liveUrl: newProject.liveUrl || "",
@@ -227,7 +227,7 @@ export default function StudioControlPanel({
       id: "s_" + Date.now(),
       name: newSkill.name,
       proficiency: Number(newSkill.proficiency) || 80,
-      category: (newSkill.category as any) || "AI/ML"
+      category: newSkill.category ?? "AI/ML"
     };
 
     onUpdate({
@@ -522,7 +522,7 @@ export default function StudioControlPanel({
                         <select
                           id="new-proj-cat"
                           value={newProject.category}
-                          onChange={(e) => setNewProject({ ...newProject, category: e.target.value as any })}
+                          onChange={(e) => setNewProject({ ...newProject, category: e.target.value as Project["category"] })}
                           className="w-full px-2 py-1.5 bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 rounded font-mono"
                         >
                           <option value="AI">AI/ML Core</option>
@@ -669,7 +669,7 @@ export default function StudioControlPanel({
                         <select
                           id="new-skill-cat"
                           value={newSkill.category}
-                          onChange={(e) => setNewSkill({ ...newSkill, category: e.target.value as any })}
+                          onChange={(e) => setNewSkill({ ...newSkill, category: e.target.value as Skill["category"] })}
                           className="w-full px-2 py-1 bg-zinc-900 border border-zinc-800 text-xs text-zinc-300 rounded font-mono"
                         >
                           <option value="AI/ML">AI/ML Core</option>

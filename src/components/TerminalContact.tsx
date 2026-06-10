@@ -31,52 +31,53 @@ export default function TerminalContact() {
 
   const executeCommand = (cmd: string) => {
     const trimmed = cmd.trim().toLowerCase();
-    const newLines = [...lines, { text: `guest@ashish-cli:~$ ${cmd}`, type: "input" as const }];
 
-    if (trimmed === "") {
-      setLines(newLines);
-      return;
-    }
+    setLines((prev) => {
+      const nextLines = [...prev, { text: `guest@ashish-cli:~$ ${cmd}`, type: "input" as const }];
 
-    switch (trimmed) {
-      case "help":
-        newLines.push({ text: "=========================================", type: "system" });
-        newLines.push({ text: "  Ashish Command Interface Index", type: "success" });
-        newLines.push({ text: "=========================================", type: "system" });
-        Object.keys(commands).forEach((key) => {
-          newLines.push({ text: `  - ${key}: ${commands[key as keyof typeof commands]}`, type: "output" });
-        });
-        break;
-      case "about":
-        newLines.push({ text: "ABOUT ASHISH KUMAR THYADI:", type: "success" });
-        newLines.push({ text: "Currently specializing in AI models, fine-tuning structures, and custom developer frameworks. Active focus rests on high-cohesion, pixel-perfect user design representations and fluid layouts.", type: "output" });
-        break;
-      case "skills":
-        newLines.push({ text: "LOADED TECH STACK DIRECTORIES:", type: "success" });
-        newLines.push({ text: "  - FRONTEND: React, Vite, TS, Tailwind CSS, motion/react", type: "output" });
-        newLines.push({ text: "  - ARTIFICIAL INTELLIGENCE: Gemini API SDK Model deployment, Agentic workflows, Prompt structuring", type: "output" });
-        newLines.push({ text: "  - BACKEND: Express servers, REST architecture, Server-Sent Events", type: "output" });
-        break;
-      case "social":
-        newLines.push({ text: "SOCIAL PIPELINES AVAILABLE:", type: "success" });
-        newLines.push({ text: "  - GitHub: https://github.com/ashi3643", type: "output" });
-        newLines.push({ text: "  - LinkedIn: https://linkedin.com/in/ashish-kumar-thyadi-30b9b0267", type: "output" });
-        break;
-      case "contact":
-        newLines.push({ text: "DIRECT EMAIL NODE: ashishthyadi@gmail.com", type: "success" });
-        break;
-      case "clear":
-        setLines([]);
-        setInputValue("");
-        return;
-      default:
-        newLines.push({ 
-          text: `Command not found: '${trimmed}'. Type 'help' to review catalog.`, 
-          type: "error" 
-        });
-    }
+      if (trimmed === "") {
+        return nextLines;
+      }
 
-    setLines(newLines);
+      switch (trimmed) {
+        case "help":
+          nextLines.push({ text: "=========================================", type: "system" });
+          nextLines.push({ text: "  Ashish Command Interface Index", type: "success" });
+          nextLines.push({ text: "=========================================", type: "system" });
+          Object.keys(commands).forEach((key) => {
+            nextLines.push({ text: `  - ${key}: ${commands[key as keyof typeof commands]}`, type: "output" });
+          });
+          break;
+        case "about":
+          nextLines.push({ text: "ABOUT ASHISH KUMAR THYADI:", type: "success" });
+          nextLines.push({ text: "Currently specializing in AI models, fine-tuning structures, and custom developer frameworks. Active focus rests on high-cohesion, pixel-perfect user design representations and fluid layouts.", type: "output" });
+          break;
+        case "skills":
+          nextLines.push({ text: "LOADED TECH STACK DIRECTORIES:", type: "success" });
+          nextLines.push({ text: "  - FRONTEND: React, Vite, TS, Tailwind CSS, motion/react", type: "output" });
+          nextLines.push({ text: "  - ARTIFICIAL INTELLIGENCE: Gemini API SDK Model deployment, Agentic workflows, Prompt structuring", type: "output" });
+          nextLines.push({ text: "  - BACKEND: Express servers, REST architecture, Server-Sent Events", type: "output" });
+          break;
+        case "social":
+          nextLines.push({ text: "SOCIAL PIPELINES AVAILABLE:", type: "success" });
+          nextLines.push({ text: "  - GitHub: https://github.com/ashi3643", type: "output" });
+          nextLines.push({ text: "  - LinkedIn: https://linkedin.com/in/ashish-kumar-thyadi-30b9b0267", type: "output" });
+          break;
+        case "contact":
+          nextLines.push({ text: "DIRECT EMAIL NODE: ashishthyadi@gmail.com", type: "success" });
+          break;
+        case "clear":
+          return [];
+        default:
+          nextLines.push({ 
+            text: `Command not found: '${trimmed}'. Type 'help' to review catalog.`, 
+            type: "error" 
+          });
+      }
+
+      return nextLines;
+    });
+
     setInputValue("");
   };
 
