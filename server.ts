@@ -7,7 +7,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = Number(process.env.PORT) || 3000;
+const isProduction = process.env.NODE_ENV === "production" || path.basename(process.argv[1] ?? "").toLowerCase() === "server.cjs";
+const serverMode = isProduction ? "production" : "development";
 
 // Body parser
 app.use(express.json());
@@ -149,7 +151,7 @@ Tech stack tags: ${tags.join(", ")}`;
 
 // Serve frontend assets
 async function initServer() {
-  if (process.env.NODE_ENV !== "production") {
+  if (!isProduction) {
     // Development Mode with Vite Middleware
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
@@ -161,7 +163,7 @@ async function initServer() {
   } else {
     // Production Mode serving compiled client code in /dist
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, { index: false }));
     app.get("*", (req, res) => {
       res.sendFile(path.join(distPath, "index.html"));
     });
@@ -169,7 +171,7 @@ async function initServer() {
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Express application running on port ${PORT} [Mode: ${process.env.NODE_ENV || "development"}]`);
+    console.log(`Express application running on port ${PORT} [Mode: ${serverMode}]`);
   });
 }
 
