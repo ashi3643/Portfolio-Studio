@@ -19,6 +19,7 @@ export default function TerminalContact() {
   const [toast, setToast] = useState<{ status: string; message: string } | null>(null);
 
   const terminalEndRef = useRef<HTMLDivElement | null>(null);
+  const isInitialRender = useRef(true);
 
   const commands = {
     help: "List available console prompts: help, about, skills, social, contact, clear",
@@ -125,6 +126,10 @@ export default function TerminalContact() {
   };
 
   useEffect(() => {
+    if (isInitialRender.current) {
+      isInitialRender.current = false;
+      return;
+    }
     terminalEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [lines]);
 

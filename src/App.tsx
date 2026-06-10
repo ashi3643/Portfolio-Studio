@@ -49,6 +49,17 @@ export default function App() {
     setActivePersona(portfolioData.currentField);
   }, [portfolioData.currentField]);
 
+  // Ensure the page starts at the top on first load, avoiding browser scroll restoration into the contact section
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.history.scrollRestoration = "manual";
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+      if (window.location.hash === "#contact-section") {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search);
+      }
+    }
+  }, []);
+
   // Persist state updates
   const handleUpdatePortfolio = (newConfig: PortfolioData) => {
     setPortfolioData(newConfig);
