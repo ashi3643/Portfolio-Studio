@@ -155,6 +155,8 @@ async function initServer() {
     // Development Mode with Vite Middleware
     const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
+      root: process.cwd(),
+      configFile: path.resolve(process.cwd(), "vite.config.ts"),
       server: { middlewareMode: true },
       appType: "spa",
     });
