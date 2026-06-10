@@ -87,8 +87,20 @@ export default function StudioControlPanel({
         })
       });
 
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("AI features are unavailable on static hosting (GitHub Pages) as they require a server backend. To use AI, run this inside the AI Studio Dev/Share environment or deploy to a Node.js dynamic host like Cloud Run.");
+        }
+        throw new Error(`Server returned error status ${response.status}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Did not receive JSON response from server. AI features require an active Node.js server running.");
+      }
+
       const result = await response.json();
-      if (!response.ok || !result.success) {
+      if (!result.success) {
         throw new Error(result.error || result.details || "Gemini engine failed to respond.");
       }
 
@@ -121,9 +133,21 @@ export default function StudioControlPanel({
         })
       });
 
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error("AI features are unavailable on static hosting (GitHub Pages) as they require a server backend. To use AI, run this inside the AI Studio Dev/Share environment or deploy to a Node.js dynamic host like Cloud Run.");
+        }
+        throw new Error(`Server returned error status ${response.status}`);
+      }
+
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Did not receive JSON response from server. AI features require an active Node.js server running.");
+      }
+
       const result = await response.json();
-      if (!response.ok || !result.success) {
-        throw new Error(result.error || "Failed to suggestion project blueprint.");
+      if (!result.success) {
+        throw new Error(result.error || "Failed to suggest project blueprint.");
       }
 
       const { description, metrics, keyFeatures, story } = result.data;
