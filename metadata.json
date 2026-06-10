@@ -1,0 +1,6 @@
+{
+  "name": "Portfolio Studio",
+  "description": "An interactive, ultra-premium developer portfolio showcase with inline live editor, dynamic field shifting, physics skills, and Gemini AI story writer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
